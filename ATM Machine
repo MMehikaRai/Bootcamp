@@ -1,0 +1,95 @@
+import java.util.Scanner;
+
+public class Atm2 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int balance = 10000;
+        int cashInMachine = 50000;
+        int PIN = 1234;
+
+        while (true) {
+            System.out.print("Enter your PIN: ");
+            int enteredPin = scanner.nextInt();
+
+            if (enteredPin != PIN) {
+                System.out.println("Incorrect PIN. Please try again.");
+                continue;
+            }
+
+            System.out.println("PIN is correct. Welcome to the ATM!");
+
+            while (true) {
+                System.out.println("\nSelect an option:");
+                System.out.println("1. Balance Enquiry");
+                System.out.println("2. Deposit");
+                System.out.println("3. Withdraw");
+                System.out.println("4. PIN Change");
+                System.out.print("Enter your choice: ");
+                int choice = scanner.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        System.out.println("Your balance is: Rs." + balance);
+                        break;
+
+                    case 2:
+                        System.out.print("Enter the amount to deposit: Rs.");
+                        int depositAmount = scanner.nextInt();
+                        if (depositAmount <= 0) {
+                            System.out.println("Invalid amount. Please enter a positive value.");
+                        } else {
+                            balance += depositAmount;
+                            cashInMachine += depositAmount;
+                            System.out.println("Deposit successful. Your updated balance is: Rs." + balance);
+                        }
+                        break;
+
+                    case 3:
+                        System.out.print("Enter the amount to withdraw: Rs.");
+                        int withdrawAmount = scanner.nextInt();
+                        if (withdrawAmount <= 0) {
+                            System.out.println("Invalid amount. Please enter a positive value.");
+                        } else if (withdrawAmount > balance || withdrawAmount > cashInMachine) {
+                            System.out.println("Insufficient funds in machine or in account.");
+                        } else {
+                            balance -= withdrawAmount;
+                            cashInMachine -= withdrawAmount;
+                            System.out.println("Withdrawal successful. Your updated balance is: Rs." + balance);
+                        }
+                        break;
+
+                    case 4:
+                        System.out.print("Enter your old PIN: ");
+                        int oldPin = scanner.nextInt();
+                        if (oldPin != PIN) {
+                            System.out.println("Incorrect old PIN.");
+                        } else {
+                            System.out.print("Enter your new PIN: ");
+                            int newPin = scanner.nextInt();
+                            System.out.print("Confirm your new PIN: ");
+                            int confirmPin = scanner.nextInt();
+                            if (newPin == confirmPin) {
+                                PIN = newPin;
+                                System.out.println("PIN successfully changed.");
+                            } else {
+                                System.out.println("New PIN and confirmation PIN do not match.");
+                            }
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Invalid option. Please select again.");
+                        break;
+                }
+
+                System.out.print("Do you want to continue? (yes/no): ");
+                String option = scanner.next();
+                if (!option.equals("yes")) {
+                    System.out.println("Thank you for using the ATM. Goodbye!");
+                    return;
+                }
+            }
+        }
+    }
+}
