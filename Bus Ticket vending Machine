@@ -1,0 +1,117 @@
+/* Write a code to implement a Bus ticket vending machine replica. Assign an initial number of tickets sold 0, the amount
+collected 0. Write a code to execute the same for an infinite number of times as many times as the user wants.
+For every iteration ask the user to enter PIN and verify the PIN. Then display the following options:
+1. Ticket issue.
+2. Balance collected.
+3. Number of tickets sold.
+4. PIN change.
+ Apply conditions to issue a ticket (include discounts).
+ Ask the user to enter the old PIN number before changing to a new PIN. If the old pin is valid then ask new
+PIN twice to confirm the new PIN.
+ After every iteration ask the user to continue. If the user says yes then continue with another iteration
+else exit from the program.*/
+
+
+import java.util.Scanner;
+public class BusVending{
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int ticketsSold = 0;
+        double amountCollected = 0;
+        int pin = 1234; // Initial PIN
+
+        while (true) {
+            System.out.print("Enter PIN: ");
+            int enteredPin = scanner.nextInt();
+
+            if (enteredPin == pin) {
+                System.out.println("PIN verified.");
+
+                System.out.println("Select an option:");
+                System.out.println("1. Ticket issue");
+                System.out.println("2. Balance collected");
+                System.out.println("3. Number of tickets sold");
+                System.out.println("4. PIN change");
+
+                int option = scanner.nextInt();
+
+                switch (option) {
+                    case 1:
+                        System.out.print("Enter number of adult passengers: ");
+                        int adultPassengers = scanner.nextInt();
+                        System.out.print("Enter number of child passengers: ");
+                        int childPassengers = scanner.nextInt();
+                        System.out.print("Enter boarding stop: ");
+                        int boardingStop = scanner.nextInt();
+                        System.out.print("Enter destination stop: ");
+                        int destinationStop = scanner.nextInt();
+
+                        int stops = destinationStop - boardingStop;
+                        double adultCost = adultPassengers * stops * 10;
+                        double childCost = childPassengers * stops * 5;
+                        double totalCost = adultCost + childCost;
+
+                        // Apply discounts
+                        double discount = 0;
+                        if (adultPassengers >= 5) {
+                            discount = 0.20;
+                        } else if (adultPassengers == 4) {
+                            discount = 0.15;
+                        } else if (adultPassengers == 3) {
+                            discount = 0.10;
+                        } else if (adultPassengers == 2) {
+                            discount = 0.05;
+                        }
+
+                        double discountedCost = totalCost * (1 - discount);
+                        amountCollected += discountedCost;
+
+                        ticketsSold += adultPassengers + childPassengers;
+
+                        System.out.println("Tickets issued successfully.");
+                        break;
+
+                    case 2:
+                        System.out.println("Balance collected: Rs. " + amountCollected);
+                        break;
+
+                    case 3:
+                        System.out.println("Number of tickets sold: " + ticketsSold);
+                        break;
+
+                    case 4:
+                        System.out.print("Enter old PIN: ");
+                        int oldPin = scanner.nextInt();
+                        if (oldPin == pin) {
+                            System.out.print("Enter new PIN: ");
+                            int newPin1 = scanner.nextInt();
+                            System.out.print("Confirm new PIN: ");
+                            int newPin2 = scanner.nextInt();
+                            if (newPin1 == newPin2) {
+                                pin = newPin1;
+                                System.out.println("PIN changed successfully.");
+                            } else {
+                                System.out.println("New PINs do not match. PIN change failed.");
+                            }
+                        } else {
+                            System.out.println("Invalid old PIN. PIN change failed.");
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Invalid option.");
+                }
+            } else {
+                System.out.println("Invalid PIN. Please try again.");
+            }
+
+            System.out.print("Do you want to continue (yes/no)? ");
+            String choice = scanner.next();
+            if (!choice.equals("yes")) {
+                break;
+            }
+        }
+
+        System.out.println("Exiting the program.");
+    }
+}
